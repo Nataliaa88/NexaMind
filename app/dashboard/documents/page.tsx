@@ -312,11 +312,6 @@ const getUserFriendlyTypeError = () =>
           await ingestDocument(insertedData.id)
         } catch (ingestError) {
           console.warn('Ingestion des chunks en arrière-plan échouée :', ingestError)
-          setErrorMessage(
-            `Le document a été uploadé, le texte a été extrait, mais l’indexation RAG a échoué : ${formatSupabaseError(
-              ingestError
-            )}`
-          )
         }
       } catch (extractionError) {
         console.warn('Extraction du texte en arrière-plan échouée :', extractionError)

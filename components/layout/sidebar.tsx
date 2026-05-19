@@ -23,24 +23,24 @@ export default function Sidebar() {
   )
 
   return (
-    <aside className="relative">
-      <div className="hidden md:flex">
+    <aside className="relative shrink-0 md:sticky md:top-0 md:z-30 md:h-screen md:self-start">
+      <div className="hidden h-full md:flex">
         <div
-          className={`relative flex h-full min-h-screen flex-col border-r border-slate-200 bg-white/95 transition-all duration-300 ease-in-out dark:border-slate-800 dark:bg-slate-950/95 ${
+          className={`relative flex h-full flex-col border-r border-slate-200 bg-white/95 transition-all duration-300 ease-in-out dark:border-slate-800 dark:bg-slate-950/95 ${
             isCollapsed ? 'w-20' : 'w-[280px]'
           }`}
         >
-          <div className="flex h-20 items-center justify-between gap-3 border-b border-slate-200 px-5 text-slate-900 dark:border-slate-800 dark:text-white">
+          <div className="flex h-20 items-center justify-between gap-3 border-b border-slate-200 px-6 text-slate-900 dark:border-slate-800 dark:text-white">
             <div className="flex items-center gap-3">
               <div className="flex h-12 w-12 items-center justify-center rounded-3xl bg-indigo-600 text-white shadow-lg shadow-indigo-500/20">
                 N
               </div>
               {!isCollapsed ? (
                 <div>
-                  <p className="text-xs uppercase tracking-[0.3em] text-slate-500 dark:text-slate-400">
+                  <p className="text-xs uppercase leading-none tracking-[0.3em] text-slate-500 dark:text-slate-400">
                     NexaMind AI
                   </p>
-                  <h1 className="text-lg font-semibold">Tableau de bord</h1>
+                  <h1 className="mt-3 text-lg font-semibold leading-none">Dashboard</h1>
                 </div>
               ) : null}
             </div>
@@ -55,7 +55,7 @@ export default function Sidebar() {
             </button>
           </div>
 
-          <nav className="flex flex-1 flex-col gap-1 overflow-hidden px-2 py-4">
+          <nav className="flex flex-1 flex-col gap-1 overflow-y-auto px-2 py-4">
             {navLinks.map((item) => {
               const Icon = item.icon
               const isActive = activePath === item.href

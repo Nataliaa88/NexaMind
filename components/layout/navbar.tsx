@@ -16,13 +16,13 @@ export default function Navbar() {
   };
 
   return (
-    <header className="sticky top-0 z-20 border-b border-slate-200 bg-white/90 px-4 py-4 backdrop-blur-xl dark:border-slate-800 dark:bg-slate-950/90 md:px-6">
-      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+    <header className="sticky top-0 z-20 border-b border-slate-200 bg-white/90 px-4 backdrop-blur-xl dark:border-slate-800 dark:bg-slate-950/90 md:h-20 md:px-6">
+      <div className="flex h-full flex-col justify-center gap-2 py-4 md:flex-row md:items-center md:justify-between md:py-0">
         <div>
-          <p className="text-sm uppercase tracking-[0.24em] text-slate-500 dark:text-slate-400">
-            Tableau de bord
+          <p className="text-sm uppercase leading-none tracking-[0.24em] text-slate-500 dark:text-slate-400">
+            Dashboard
           </p>
-          <h2 className="mt-2 text-2xl font-semibold text-slate-950 dark:text-white">
+          <h2 className="mt-3 text-2xl font-semibold leading-none text-slate-950 dark:text-white">
             Bienvenue chez NexaMind AI
           </h2>
         </div>

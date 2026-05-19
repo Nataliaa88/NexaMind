@@ -303,13 +303,22 @@ export async function POST(request: Request) {
     }
 
     if (sharedDocumentContent && sharedDocument?.id) {
-      await ensureChunksForDocument(supabaseAdmin, sharedDocument.id, sharedDocumentContent)
+      try {
+        await ensureChunksForDocument(supabaseAdmin, sharedDocument.id, sharedDocumentContent)
+      } catch (chunkError) {
+        console.warn('[chat/ia] shared document chunking failed; continuing with extracted content', {
+          documentId: sharedDocument.id,
+          error: chunkError,
+        })
+      }
     }
 
     const documentIds = Array.isArray(documents) ? documents.map((doc) => doc.id) : []
-    let topChunks = await retrieveTopChunksForQuery(supabase, documentIds, lastUserMessage, 4)
+    let topChunks = sharedDocumentContent
+      ? []
+      : await retrieveTopChunksForQuery(supabase, documentIds, lastUserMessage, 4)
 
-    if (topChunks.length === 0 && Array.isArray(documents) && documents.length > 0) {
+    if (!sharedDocumentContent && topChunks.length === 0 && Array.isArray(documents) && documents.length > 0) {
       for (const doc of documents) {
         if (doc.content?.trim()) {
           await ensureChunksForDocument(supabaseAdmin, doc.id, doc.content.trim())
@@ -337,7 +346,12 @@ export async function POST(request: Request) {
       }
 
       const systemPrompt = buildUnifiedChatSystemPrompt(finalDocumentContext)
-      payloadMessages = [{ role: 'system', content: systemPrompt }, ...messages]
+      payloadMessages = sharedDocumentContent
+        ? [
+            { role: 'system', content: systemPrompt },
+            { role: 'user', content: lastUserMessage },
+          ]
+        : [{ role: 'system', content: systemPrompt }, ...messages]
     }
 
     const reply = await getOpenAIChatCompletion(payloadMessages)

@@ -30,6 +30,21 @@ type SharedDocument = {
 }
 
 const STORAGE_KEY = 'nexamind:conversations'
+const SHARED_DOCUMENT_READY_PREFIX = 'Document partagé prêt pour le chat'
+const SHARED_DOCUMENT_INSERT_PREFIX = 'Merci de consulter ce document'
+
+const buildSharedDocumentActionPrompt = (title: string) =>
+  `Que souhaitez-vous que je fasse avec le document « ${title} » ? Vous pouvez me demander un résumé, une analyse, une extraction des points clés, une reformulation ou poser une question précise.`
+
+const isSharedDocumentIntroMessage = (content: string, sharedDocument: SharedDocument | null) => {
+  if (!sharedDocument) return false
+
+  const normalized = content.trim()
+  return (
+    normalized.startsWith(SHARED_DOCUMENT_READY_PREFIX) ||
+    normalized.startsWith(SHARED_DOCUMENT_INSERT_PREFIX)
+  )
+}
 
 const initialConversation: Conversation = {
   id: 'conversation-1',
@@ -247,6 +262,19 @@ export default function ChatPage() {
     updateCurrentConversation(nextMessages)
     setInputValue('')
     setErrorMessage(null)
+
+    if (isSharedDocumentIntroMessage(trimmed, sharedDocument)) {
+      const assistantMessage: Message = {
+        id: `a-${Date.now()}`,
+        role: 'assistant',
+        content: buildSharedDocumentActionPrompt(sharedDocument.title),
+      }
+      const finalMessages = [...nextMessages, assistantMessage]
+      setMessages(finalMessages)
+      updateCurrentConversation(finalMessages)
+      return
+    }
+
     setIsTyping(true)
     setIsSending(true)
 

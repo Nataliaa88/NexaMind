@@ -35,6 +35,19 @@ OPENAI_EMBEDDING_MODEL=text-embedding-3-large
 
 > `SUPABASE_SERVICE_ROLE_KEY` doit rester secret et ne doit pas être exposé côté client.
 
+### Mise à jour du schéma Supabase
+
+Si l’upload d’un document réussit mais que l’indexation RAG échoue avec :
+
+```
+Could not find the 'chunk_index' column of 'chunks' in the schema cache
+```
+
+exécutez la migration SQL `supabase/migrations/20260519093000_fix_chunks_chunk_index.sql`
+depuis l’éditeur SQL Supabase. Elle ajoute les colonnes attendues par
+l’indexation RAG (`chunk_index`, `chunk_text`, `token_count`, `embedding`) et
+recharge le cache de schéma Supabase/PostgREST.
+
 ## Getting Started
 
 First, run the development server:
