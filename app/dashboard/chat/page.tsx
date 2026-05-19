@@ -263,11 +263,12 @@ export default function ChatPage() {
     setInputValue('')
     setErrorMessage(null)
 
-    if (isSharedDocumentIntroMessage(trimmed, sharedDocument)) {
+    const activeSharedDocument = sharedDocument
+    if (activeSharedDocument && isSharedDocumentIntroMessage(trimmed, activeSharedDocument)) {
       const assistantMessage: Message = {
         id: `a-${Date.now()}`,
         role: 'assistant',
-        content: buildSharedDocumentActionPrompt(sharedDocument.title),
+        content: buildSharedDocumentActionPrompt(activeSharedDocument.title),
       }
       const finalMessages = [...nextMessages, assistantMessage]
       setMessages(finalMessages)
